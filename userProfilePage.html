@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile</h1>
+    <div id="userContainer"></div>
+    
+    <script>
+        // Fetch user profile data from a JSON file
+        fetch('userProfiles.json')
+            .then(response => { 
+                if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.status);
+            }
+            // JSON can be directly parsed into a JavaScript object
+            return response.json();
+        })
+            .then(users => {
+                const userContainer = document.getElementById('userContainer');
+                // 2. Traverse the user array and render the information of each user
+                users.forEach(user => {
+                    const userDiv = document.createElement('div');
+                     userDiv.style.border = '1px solid #ccc';
+                     userDiv.style.padding = '15px';
+                     userDiv.style.margin = '10px 0';
+                     userDiv.style.borderRadius = '5px';
+                     // Concatenate user information (including all fields)
+                     userDiv.innerHTML = `
+                     <h3>${user.firstName} ${user.lastName}</h3>
+                     <p><strong>Email:</strong>${user.email}</p>
+                     <p><strong>dateOfBirth:</strong>${user.dateOfBirth}</p>
+                     <h4>Address</h4>
+                     <p>Street:${user.address.street}</p>
+                     <p>City:${user.address.city}</p>
+                     <p>State:${user.address.state}</p>
+                     <p>zipCode:${user.address.zipCode}</p>
+                     <h4>userPreferences</h4>
+                    <p>Theme:${user.userPreferences.theme}</p>
+                    <p>Language:${user.userPreferences.language}</p>
+                    <p>notification:${user.userPreferences.notifications}</p>
+                    <p>subscription newsletter:${user.userPreferences.subscription ? 'Yes' : 'NO'}</p>
+                    `;
+                    userContainer.appendChild(userDiv);
+                });
+            })
+            .catch(error => console.error('There was a problem with the fetch operation:', error));
+
+    </script>
+</body>
+</html>
