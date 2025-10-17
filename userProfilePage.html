@@ -3,6 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <title>User Profile</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        /* User container styles */
+        #userContainer {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* User card styles */
+        .user-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .user-card h3 {
+            color: #3498db;
+            margin-top: 0;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 5px;
+        }
+
+        .user-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            margin-top: 15px;
+        }
+
+        .user-card p {
+            margin: 5px 0;
+        }
+
+        /* Address and preferences section styles */
+        .address-section, .preferences-section {
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>User Profile</h1>
@@ -15,39 +81,41 @@
                 if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.status);
             }
-            // JSON can be directly parsed into a JavaScript object
             return response.json();
         })
             .then(users => {
                 const userContainer = document.getElementById('userContainer');
-                // 2. Traverse the user array and render the information of each user
+                // Traverse the user array and render each user's information
                 users.forEach(user => {
                     const userDiv = document.createElement('div');
-                     userDiv.style.border = '1px solid #ccc';
-                     userDiv.style.padding = '15px';
-                     userDiv.style.margin = '10px 0';
-                     userDiv.style.borderRadius = '5px';
-                     // Concatenate user information (including all fields)
-                     userDiv.innerHTML = `
-                     <h3>${user.firstName} ${user.lastName}</h3>
-                     <p><strong>Email:</strong>${user.email}</p>
-                     <p><strong>dateOfBirth:</strong>${user.dateOfBirth}</p>
-                     <h4>Address</h4>
-                     <p>Street:${user.address.street}</p>
-                     <p>City:${user.address.city}</p>
-                     <p>State:${user.address.state}</p>
-                     <p>zipCode:${user.address.zipCode}</p>
-                     <h4>userPreferences</h4>
-                    <p>Theme:${user.userPreferences.theme}</p>
-                    <p>Language:${user.userPreferences.language}</p>
-                    <p>notification:${user.userPreferences.notifications}</p>
-                    <p>subscription newsletter:${user.userPreferences.subscription ? 'Yes' : 'NO'}</p>
+                    // Use CSS class instead of inline styles
+                    userDiv.className = 'user-card';
+                    
+                    userDiv.innerHTML = `
+                    <h3>${user.firstName} ${user.lastName}</h3>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Date of Birth:</strong> ${user.dateOfBirth}</p>
+                    
+                    <h4>Address</h4>
+                    <div class="address-section">
+                        <p>Street: ${user.address.street}</p>
+                        <p>City: ${user.address.city}</p>
+                        <p>State: ${user.address.state}</p>
+                        <p>Zip Code: ${user.address.zipCode}</p>
+                    </div>
+                    
+                    <h4>User Preferences</h4>
+                    <div class="preferences-section">
+                        <p>Theme: ${user.userPreferences.theme}</p>
+                        <p>Language: ${user.userPreferences.language}</p>
+                        <p>Notifications: ${user.userPreferences.notifications}</p>
+                        <p>Subscription Newsletter: ${user.userPreferences.subscription ? 'Yes' : 'No'}</p>
+                    </div>
                     `;
                     userContainer.appendChild(userDiv);
                 });
             })
             .catch(error => console.error('There was a problem with the fetch operation:', error));
-
     </script>
 </body>
 </html>
